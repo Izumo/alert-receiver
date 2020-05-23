@@ -1,0 +1,2 @@
+#curl -XPOST -H "Content-Type: application/json" --data @alert001.json http://alert-receiver.apps-crc.testing/webhook
+curl -XPOST -H "Content-Type: application/json" --data @alert001.json http://localhost:8081/webhook

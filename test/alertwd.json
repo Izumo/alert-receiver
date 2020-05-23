@@ -1,0 +1,27 @@
+{
+  "receiver": "watchdog",
+  "status": "firing",
+  "alerts": [
+    {
+      "status": "firing",
+      "labels": "[Object]",
+      "annotations": "[Object]",
+      "startsAt": "2020-05-23T04:37:00.163677339Z",
+      "endsAt": "0001-01-01T00:00:00Z",
+      "generatorURL": "https://prometheus-k8s-openshift-monitoring.apps-crc.testing/graph?g0.expr=vector%281%29&g0.tab=1",
+      "fingerprint": "e25963d69425c836"
+    }
+  ],
+  "groupLabels": {},
+  "commonLabels": {
+    "alertname": "Watchdog",
+    "prometheus": "openshift-monitoring/k8s",
+    "severity": "none"
+  },
+  "commonAnnotations": {
+    "message": "This is an alert meant to ensure that the entire alerting pipeline is functional."
+  },
+  "externalURL": "https://alertmanager-main-openshift-monitoring.apps-crc.testing",
+  "version": "4",
+  "groupKey": "{}/{alertname=Watchdog}:{}"
+}
