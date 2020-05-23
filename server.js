@@ -55,6 +55,10 @@ function findAlertMessage(alertname, annotations) {
         entries = rules.filter(function(item, index){
             if (item.name == alertname) return true;
         });
+	if (typeof enttries[0].annotations == "undefined") {
+	    console.log("no annotations in the rule");
+	    console.log(entries);
+        }
 	message = entries[0].annotations.message;
     }
     return message;
@@ -76,7 +80,6 @@ app.post('/webhook/', (req, res) => {
     alert.alertname = req.body.commonLabels.alertname;
     alert.severity = req.body.commonLabels.severity;
     alert.message = findAlertMessage(alert.alertname, req.body.commonAnnotations);
-//  alert.message = req.body.commonAnnotations.message;
 
     console.log(formatAlert(alert))
   }
@@ -97,6 +100,6 @@ app.post('/watchdog/', (req, res) => {
 var server = app.listen(8081, function () {
   var host = server.address().address;
   var port = server.address().port;
-  console.log('Example app listening at http://%s:%s', host, port);
+  console.log('listening at http://%s:%s', host, port);
 });
 
