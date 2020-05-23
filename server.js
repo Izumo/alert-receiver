@@ -49,15 +49,16 @@ function findAlertMessage(alert, body) {
 
     var message;
 
-    if (typeof body.commonAnnotations.message == "undefined") {
+    console.log("------ debug ------");
+    console.log(alert.alert.labels);
+    console.log(alert.alert.annotations);
+    console.log("------ debug ------");
+
+    if (typeof body.commonAnnotations.message != "undefined") {
         message = body.commonAnnotations.message;
     }
-    else if (typeof alert.alert.annotations.message == "undefined") {
+    else if (typeof alert.alert.annotations.message != "undefined") {
         // try to use message in labels section
-        console.log("------ debug ------");
-        console.log(alert.alert.labels);
-        console.log(alert.alert.annotations);
-        console.log("------ debug ------");
         message = alert.alert.annotations.message;
     }
     else {
@@ -66,7 +67,7 @@ function findAlertMessage(alert, body) {
             if (item.name == alert.alertname) return true;
         });
 	if (Object.keys(entries).length > 0) {
-            // rules found,  use its message
+            // rules found, use its message
 	    message = entries[0].annotations.message;
 	    if (typeof message == "undefined") {
                 // the rule doesn't have message, use summary
@@ -109,8 +110,6 @@ app.post('/webhook/', (req, res) => {
 
 app.post('/watchdog/', (req, res) => {
   res.sendStatus(200)
-
-  console.log(req.body);
 
   for (var i in req.body.alerts) {
     var alert = {};
