@@ -40,8 +40,8 @@ function formatAlert(alert) {
 function formatWatchdog(alert) {
 
     return getTimestampString((new Date()).toISOString()) + ' ' +
-           '[' + getTimestampString(alert.startsAt) + '] ' + 
-           '(' + alert.status + ') ' +
+           '[' + getTimestampString(alert.alert.startsAt) + '] ' + 
+           '(' + alert.alert.status + ') ' +
            alert.alertname;
 }
 
