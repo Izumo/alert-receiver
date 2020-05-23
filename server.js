@@ -56,9 +56,13 @@ function findAlertMessage(alert, body) {
             if (item.name == alert.alertname) return true;
         });
 	if (Object.keys(entries).length == 0) {
-	    console.log("no rules found");
-	    console.log("alertname = " + alert.alertname);
-	    message = alert.alert.generatorURL;
+//          console.log("no rules found");
+//          console.log("alertname = " + alert.alertname);
+            console.log("------ debug ------");
+            console.log(alert.alert.labels);
+            console.log(alert.alert.annotations);
+            console.log("------ debug ------");
+            message = alert.alert.generatorURL;
 	}
 	else {
 	    message = entries[0].annotations.message;
