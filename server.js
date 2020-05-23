@@ -86,7 +86,7 @@ app.post('/webhook/', (req, res) => {
     alert.alert = req.body.alerts[i];
     alert.alertname = req.body.commonLabels.alertname;
     if (typeof alert.alertname == "undefined") {
-        alert.alertname = alert.alert.labals.alertname;
+        alert.alertname = alert.alert.labels.alertname;
     }
     alert.severity = req.body.commonLabels.severity;
     if (typeof alert.severity == "undefined") {
