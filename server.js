@@ -62,7 +62,7 @@ function findAlertMessage(alert, body) {
             console.log(alert.alert.labels);
             console.log(alert.alert.annotations);
             console.log("------ debug ------");
-            message = alert.alert.generatorURL;
+            message = alert.alert.annotations.message;
 	}
 	else {
 	    message = entries[0].annotations.message;
@@ -85,7 +85,13 @@ app.post('/webhook/', (req, res) => {
     var alert = {};
     alert.alert = req.body.alerts[i];
     alert.alertname = req.body.commonLabels.alertname;
+    if (typeof alert.alertname == "undefined") {
+        alert.alertname = alert.alert.labals.alertname;
+    }
     alert.severity = req.body.commonLabels.severity;
+    if (typeof alert.severity == "undefined") {
+        alert.severity = alert.alert.labels.severity;
+    }
     alert.message = findAlertMessage(alert, req.body);
 
     console.log(formatAlert(alert))
