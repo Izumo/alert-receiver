@@ -60,7 +60,9 @@ function findAlertMessage(alert, body) {
 	    console.log("alertname = " + alert.alertname);
 	    message = alert.generatorURL;
 	}
-	message = entries[0].annotations.message;
+	else {
+	    message = entries[0].annotations.message;
+        }
     }
     return message;
 }
