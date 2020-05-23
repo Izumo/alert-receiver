@@ -55,15 +55,11 @@ function findAlertMessage(alert, body) {
         entries = rules.filter(function(item, index){
             if (item.name == alert.alertname) return true;
         });
-	if (entries.length == 0) {
+	if (Object.keys(entries).length == 0) {
 	    console.log("no rules found");
 	    console.log("alertname = " + alert.alertname);
 	    message = alert.generatorURL;
 	}
-	if (typeof entries[0].annotations == "undefined") {
-	    console.log("no annotations in the rule");
-	    console.log(entries);
-        }
 	message = entries[0].annotations.message;
     }
     return message;
@@ -92,6 +88,8 @@ app.post('/webhook/', (req, res) => {
 
 app.post('/watchdog/', (req, res) => {
   res.sendStatus(200)
+
+  console.log(req.body);
 
   for (var i in req.body.alerts) {
     var alert = {};
