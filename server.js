@@ -58,7 +58,7 @@ function findAlertMessage(alert, body) {
 	if (Object.keys(entries).length == 0) {
 	    console.log("no rules found");
 	    console.log("alertname = " + alert.alertname);
-	    message = alert.generatorURL;
+	    message = alert.alert.generatorURL;
 	}
 	else {
 	    message = entries[0].annotations.message;
