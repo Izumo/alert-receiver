@@ -55,7 +55,12 @@ function findAlertMessage(alertname, annotations) {
         entries = rules.filter(function(item, index){
             if (item.name == alertname) return true;
         });
-	if (typeof enttries[0].annotations == "undefined") {
+	if (entries.length == 0) {
+	    console.log("no rules found");
+	    console.log("alertname = " + alertname);
+	    message = "hogehoge";
+	}
+	if (typeof entries[0].annotations == "undefined") {
 	    console.log("no annotations in the rule");
 	    console.log(entries);
         }
