@@ -49,10 +49,10 @@ function findAlertMessage(alert, body) {
 
     var message;
 
-    console.log("------ debug ------");
-    console.log(alert.alert.labels);
-    console.log(alert.alert.annotations);
-    console.log("------ debug ------");
+//  console.log("------ debug ------");
+//  console.log(alert.alert.labels);
+//  console.log(alert.alert.annotations);
+//  console.log("------ debug ------");
 
     if (typeof body.commonAnnotations.message != "undefined") {
         message = body.commonAnnotations.message;
@@ -89,7 +89,7 @@ app.use(bodyParser.json());
 app.post('/webhook/', (req, res) => {
   res.sendStatus(200)
 
-  console.log(req.body);
+//console.log(req.body);
 
   for (var i in req.body.alerts) {
     var alert = {};
