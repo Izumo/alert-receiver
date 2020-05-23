@@ -47,25 +47,34 @@ function formatWatchdog(alert) {
 
 function findAlertMessage(alert, body) {
 
-    var message = body.commonAnnotations.message;
+    var message;
 
-    if (typeof message == "undefined") {
-
-        // alert doesn't have message, get from rules
+    if (typeof body.commonAnnotations.message == "undefined") {
+        message = body.commonAnnotations.message;
+    }
+    else if (typeof alert.alert.annotations.message == "undefined") {
+        // try to use message in labels section
+        console.log("------ debug ------");
+        console.log(alert.alert.labels);
+        console.log(alert.alert.annotations);
+        console.log("------ debug ------");
+        message = alert.alert.annotations.message;
+    }
+    else {
+        // missing message, get from rules
         entries = rules.filter(function(item, index){
             if (item.name == alert.alertname) return true;
         });
-	if (Object.keys(entries).length == 0) {
-//          console.log("no rules found");
-//          console.log("alertname = " + alert.alertname);
-            console.log("------ debug ------");
-            console.log(alert.alert.labels);
-            console.log(alert.alert.annotations);
-            console.log("------ debug ------");
-            message = alert.alert.annotations.message;
-	}
-	else {
+	if (Object.keys(entries).length > 0) {
+            // rules found,  use its message
 	    message = entries[0].annotations.message;
+	    if (typeof message == "undefined") {
+                // the rule doesn't have message, use summary
+	        message = entries[0].annotations.summary;
+            }
+        }
+	else {
+            // can not find message, leave it "undefined"
         }
     }
     return message;
