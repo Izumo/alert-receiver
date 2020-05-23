@@ -45,20 +45,20 @@ function formatWatchdog(alert) {
            alert.alertname;
 }
 
-function findAlertMessage(alertname, annotations) {
+function findAlertMessage(alert, body) {
 
-    var message = annotations.message;
+    var message = body.commonAnnotations.message;
 
     if (typeof message == "undefined") {
 
         // alert doesn't have message, get from rules
         entries = rules.filter(function(item, index){
-            if (item.name == alertname) return true;
+            if (item.name == alert.alertname) return true;
         });
 	if (entries.length == 0) {
 	    console.log("no rules found");
-	    console.log("alertname = " + alertname);
-	    message = "hogehoge";
+	    console.log("alertname = " + alert.alertname);
+	    message = alert.generatorURL;
 	}
 	if (typeof entries[0].annotations == "undefined") {
 	    console.log("no annotations in the rule");
