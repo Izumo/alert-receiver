@@ -84,7 +84,7 @@ app.post('/webhook/', (req, res) => {
     alert.alert = req.body.alerts[i];
     alert.alertname = req.body.commonLabels.alertname;
     alert.severity = req.body.commonLabels.severity;
-    alert.message = findAlertMessage(alert.alertname, req.body.commonAnnotations);
+    alert.message = findAlertMessage(alert, req.body);
 
     console.log(formatAlert(alert))
   }
