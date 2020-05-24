@@ -94,15 +94,9 @@ app.post('/webhook/', (req, res) => {
   for (var i in req.body.alerts) {
     var alert = {};
     alert.alert = req.body.alerts[i];
-    alert.alertname = req.body.commonLabels.alertname;
-    if (typeof alert.alertname == "undefined") {
-        alert.alertname = alert.alert.labels.alertname;
-    }
-    alert.severity = req.body.commonLabels.severity;
-    if (typeof alert.severity == "undefined") {
-        alert.severity = alert.alert.labels.severity;
-    }
-    alert.message = findAlertMessage(alert, req.body);
+    alert.alertname = alert.alert.labels.alertname;
+    alert.severity = alert.alert.labels.severity;
+    alert.message = alert.alert.annotations.message;
 
     console.log(formatAlert(alert))
   }
