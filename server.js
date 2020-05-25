@@ -29,8 +29,6 @@ function formatAlert(alert) {
 
     return getTimestampString((new Date()).toISOString()) + ' ' +
            '[' + getTimestampString(alert.startsAt) + '] ' + 
-           alert.fingerprint +
-           ': ' +
            '(' + alert.status + ') ' +
            alert.alertname +
            ': ' +
@@ -87,7 +85,7 @@ app.post('/watchdog/', (req, res) => {
 });
 
 // HTTP server
-var server = app.listen(8081, function () {
+var server = app.listen(8080, function () {
   var host = server.address().address;
   var port = server.address().port;
   console.log('listening at http://%s:%s', host, port);
