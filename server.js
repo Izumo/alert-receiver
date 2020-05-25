@@ -6,6 +6,10 @@ var rules = require('./alerting_rules.json');
 
 var app = express();
 
+
+//------------------------------------------------------------
+// Convert JSON timestamp object to timestamp string
+//------------------------------------------------------------
 function getTimestampString(timestamp) {
 
     // use JSON data as it is
@@ -25,6 +29,9 @@ function getTimestampString(timestamp) {
     return YYYY + '-' + MM + '-' + DD + 'T' + hh + ':' + mm + ':' + ss + '.' + milli;
 }
 
+//------------------------------------------------------------
+// convert alert object to string
+//------------------------------------------------------------
 function formatAlert(alert) {
 
     return getTimestampString((new Date()).toISOString()) + ' ' +
@@ -37,6 +44,9 @@ function formatAlert(alert) {
            alert.message;
 }
 
+//------------------------------------------------------------
+// convert alert object (for watchdog) to string
+//------------------------------------------------------------
 function formatWatchdog(alert) {
 
     return getTimestampString((new Date()).toISOString()) + ' ' +
@@ -45,6 +55,9 @@ function formatWatchdog(alert) {
            alert.alertname;
 }
 
+//------------------------------------------------------------
+// build alert object from POST message
+//------------------------------------------------------------
 function buildAlertObject(alertmessage) {
     var alert = {};
 
@@ -58,12 +71,17 @@ function buildAlertObject(alertmessage) {
     return alert;
 }
 
-
+//------------------------------------------------------------
+// express setting
+//------------------------------------------------------------
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
 
+//------------------------------------------------------------
+// POST handler for alert webhook
+//------------------------------------------------------------
 app.post('/webhook/', (req, res) => {
   res.sendStatus(200);
 
@@ -74,6 +92,9 @@ app.post('/webhook/', (req, res) => {
   }
 });
 
+//------------------------------------------------------------
+// POST handler for watchdog
+//------------------------------------------------------------
 app.post('/watchdog/', (req, res) => {
   res.sendStatus(200);
 
@@ -84,7 +105,9 @@ app.post('/watchdog/', (req, res) => {
   }
 });
 
+//------------------------------------------------------------
 // HTTP server
+//------------------------------------------------------------
 var server = app.listen(8080, function () {
   var host = server.address().address;
   var port = server.address().port;
