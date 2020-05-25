@@ -28,8 +28,10 @@ function getTimestampString(timestamp) {
 function formatAlert(alert) {
 
     return getTimestampString((new Date()).toISOString()) + ' ' +
-           '[' + getTimestampString(alert.alert.startsAt) + '] ' + 
-           '(' + alert.alert.status + ') ' +
+           '[' + getTimestampString(alert.startsAt) + '] ' + 
+           alert.fingerprint +
+           ': ' +
+           '(' + alert.status + ') ' +
            alert.alertname +
            ': ' +
            alert.severity + 
@@ -40,46 +42,24 @@ function formatAlert(alert) {
 function formatWatchdog(alert) {
 
     return getTimestampString((new Date()).toISOString()) + ' ' +
-           '[' + getTimestampString(alert.alert.startsAt) + '] ' + 
-           '(' + alert.alert.status + ') ' +
+           '[' + getTimestampString(alert.startsAt) + '] ' + 
+           '(' + alert.status + ') ' +
            alert.alertname;
 }
 
-function findAlertMessage(alert, body) {
+function buildAlertObject(alertmessage) {
+    var alert = {};
 
-    var message;
+    alert.status      = alertmessage.status;
+    alert.startsAt    = alertmessage.startsAt;
+    alert.fingerprint = alertmessage.fingerprint;
+    alert.alertname   = alertmessage.labels.alertname;
+    alert.severity    = alertmessage.labels.severity;
+    alert.message     = alertmessage.annotations.message;
 
-//  console.log("------ debug ------");
-//  console.log(alert.alert.labels);
-//  console.log(alert.alert.annotations);
-//  console.log("------ debug ------");
-
-    if (typeof body.commonAnnotations.message != "undefined") {
-        message = body.commonAnnotations.message;
-    }
-    else if (typeof alert.alert.annotations.message != "undefined") {
-        // try to use message in labels section
-        message = alert.alert.annotations.message;
-    }
-    else {
-        // missing message, get from rules
-        entries = rules.filter(function(item, index){
-            if (item.name == alert.alertname) return true;
-        });
-	if (Object.keys(entries).length > 0) {
-            // rules found, use its message
-	    message = entries[0].annotations.message;
-	    if (typeof message == "undefined") {
-                // the rule doesn't have message, use summary
-	        message = entries[0].annotations.summary;
-            }
-        }
-	else {
-            // can not find message, leave it "undefined"
-        }
-    }
-    return message;
+    return alert;
 }
+
 
 app.use(bodyParser.urlencoded({
     extended: true
@@ -87,29 +67,22 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.post('/webhook/', (req, res) => {
-  res.sendStatus(200)
-
-//console.log(req.body);
+  res.sendStatus(200);
 
   for (var i in req.body.alerts) {
-    var alert = {};
-    alert.alert = req.body.alerts[i];
-    alert.alertname = alert.alert.labels.alertname;
-    alert.severity = alert.alert.labels.severity;
-    alert.message = alert.alert.annotations.message;
+    var alert = buildAlertObject(req.body.alerts[i]);
 
     console.log(formatAlert(alert))
   }
 });
 
 app.post('/watchdog/', (req, res) => {
-  res.sendStatus(200)
+  res.sendStatus(200);
 
   for (var i in req.body.alerts) {
-    var alert = {};
-    alert.alert = req.body.alerts[i];
-    alert.alertname = req.body.commonLabels.alertname;
-    console.log(formatWatchdog(alert))
+    var alert = buildAlertObject(req.body.alerts[i]);
+
+    console.log(formatWatchdog(alert));
   }
 });
 
