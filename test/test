@@ -1,2 +1,12 @@
-#curl -XPOST -H "Content-Type: application/json" --data @alert001.json http://alert-receiver.apps-crc.testing/webhook
-curl -XPOST -H "Content-Type: application/json" --data @alert001.json http://localhost:8081/webhook
+#!/bin/sh
+
+HOST=alert-receiver.apps-crc.testing/webhook
+HOST=localhost:8081
+
+
+curl -XPOST -H "Content-Type: application/json" --data @alertwd.json http://${HOST}/watchdog
+curl -XPOST -H "Content-Type: application/json" --data @alert001.json http://${HOST}/webhook
+curl -XPOST -H "Content-Type: application/json" --data @alert002.json http://${HOST}/webhook
+curl -XPOST -H "Content-Type: application/json" --data @alert003.json http://${HOST}/webhook
+curl -XPOST -H "Content-Type: application/json" --data @alert004.json http://${HOST}/webhook
+curl -XPOST -H "Content-Type: application/json" --data @alert005.json http://${HOST}/webhook
